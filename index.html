@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuadernillos - Prototipo</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Librerías -->
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+        // Configuración necesaria para pdf.js
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    </script>
+</head>
+<body>
+    <div id="app">
+        <header>
+            <h1>Cuadernillos</h1>
+            <p class="subtitle">Preparación de libros para impresión</p>
+        </header>
+
+        <main>
+            <section id="upload-section">
+                <div class="card">
+                    <h2>1. Seleccionar PDF</h2>
+                    <input type="file" id="pdf-input" accept="application/pdf">
+
+                    <div id="file-info" class="hidden">
+                        <p><strong>Archivo:</strong> <span id="filename">-</span></p>
+                        <p><strong>Páginas del documento:</strong> <span id="total-pages">-</span></p>
+                        <p id="prediction-info" class="prediction-box">
+                            <strong>Cuadernillos previstos:</strong> <span id="booklets-count">-</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>2. Configuración</h2>
+                    <div class="config-grid">
+                        <div>
+                            <label for="signature-size">Páginas por cuadernillo:</label>
+                            <select id="signature-size">
+                                <option value="8">8</option>
+                                <option value="16">16</option>
+                                <option value="32" selected>32</option>
+                                <option value="48">48</option>
+                                <option value="64">64</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="flip-mode">Giro de impresión:</label>
+                            <select id="flip-mode">
+                                <option value="short">Borde corto (Recomendado)</option>
+                                <option value="long">Borde largo</option>
+                            </select>
+                        </div>
+                    </div>
+                    <p class="hint" id="print-hint">Consejo: Para este formato de libro, la opción estándar es voltear por el borde corto.</p>
+
+                    <button id="process-btn" disabled>Procesar Cuadernillos</button>
+                </div>
+            </section>
+
+            <section id="results-section" class="hidden">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2>3. Cuadernillos Generados</h2>
+                    <button id="download-all-btn" class="btn-small" style="width: auto; background: var(--secondary-color); color: black;">Descargar Todos</button>
+                </div>
+                <div id="booklets-list">
+                    <!-- Los cuadernillos aparecerán aquí -->
+                </div>
+                <button id="clear-btn" class="secondary">Nueva sesión</button>
+            </section>
+
+            <section id="status-message" class="hidden">
+                <p id="status-text"></p>
+            </section>
+        </main>
+
+        <!-- Modal de Previsualización -->
+        <div id="preview-modal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="preview-title">Previsualización</h3>
+                    <button id="close-preview" class="close-btn">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div id="preview-container">
+                        <canvas id="preview-canvas"></canvas>
+                    </div>
+                    <div class="preview-controls">
+                        <button id="prev-page">Anterior</button>
+                        <span>Página <span id="current-page">1</span> de <span id="total-preview-pages">1</span></span>
+                        <button id="next-page">Siguiente</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Procesamiento local 100% privado</p>
+        </footer>
+    </div>
+
+    <!-- Módulos de la aplicación -->
+    <script src="js/imposition-engine.js"></script>
+    <script src="js/pdf-processor.js"></script>
+    <script src="js/ui-manager.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
